@@ -1,6 +1,8 @@
 #include "getMaxChi.h"
 #include "init.h"
 
+static int diff(int seq1, int seq2, int *range, int *polyposn);
+
 /* NB: We return the site just BEFORE a breakpoint (as in TREEVOLVE). 
 See code for C-function doChi. */
 

@@ -46,13 +46,15 @@ static int siteSpecificSummary(int numsig, double *chisqs, int *winlocs,
 
 
 /* -------------- global variables --------------- */
-int numBases, numBreaks, nseqs;
-int winHalfWidth, permReps;
-char **sequenceLabels;
-char **sequences;
-static char programName[] = "Stepwise MaxChi";
-static char version[] = "0.1";
+extern int numBases, numBreaks, nseqs;
+extern int winHalfWidth, permReps;
+extern char **sequenceLabels;                          
+extern char **sequences;                               
 
+#ifdef C_PROGRAM
+static char programName[] = "Stepwise MaxChi";
+static char version[] = "0.1-1";
+#endif
 
 /*=========================================================================*/
 

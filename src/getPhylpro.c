@@ -1,6 +1,9 @@
 #include "getPhylpro.h"
 #include "init.h"
 #include <stdlib.h>
+
+static int diff(int seq1, int seq2, int *range, int *polyposn);
+
 /***********************************************************************/
 double getMinCor(int *polyposn, int nsites, int winHalfWidth) 
 {

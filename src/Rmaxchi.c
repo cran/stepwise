@@ -1,6 +1,6 @@
 #include <stdlib.h>
 #include "init.h"
-#include "getMaxChi.h"
+/* #include "getMaxChi.h" */
 #include <R.h>
 #include <Rdefines.h>
 

@@ -45,10 +45,10 @@ static int siteSpecificSummary(int numsig, double *corrs, int *winlocs,
 
 
 /* -------------- global variables --------------- */
-int numBases, numBreaks, nseqs;
-int winHalfWidth, permReps;
-char **sequenceLabels;
-char **sequences;
+extern int numBases, numBreaks, nseqs;
+extern int winHalfWidth, permReps;
+extern char **sequenceLabels;
+extern char **sequences;
 static char programName[] = "Stepwise Phylpro";
 static char version[] = "0.1";
 

@@ -24,7 +24,7 @@
 #define FALSE 0
 
 /* global variables */
-extern int numBases, nseqs;
+extern int numBases, numBreaks, nseqs;
 extern int winHalfWidth, permReps;
 extern char **sequenceLabels;
 extern char **sequences;

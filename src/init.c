@@ -2,6 +2,12 @@
 #include <time.h>
 #include <ctype.h>
 
+/* global variables */
+int numBases, numBreaks, nseqs;
+int winHalfWidth, permReps;
+char **sequenceLabels;
+char **sequences;
+
 static int z_rndu=137;
 static unsigned w_rndu=13757;
 

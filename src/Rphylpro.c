@@ -1,6 +1,6 @@
 #include <stdlib.h>
 #include "init.h"
-#include "getPhylpro.h"
+/* #include "getPhylpro.h" */
 #include <R.h>
 #include <Rdefines.h>
 
