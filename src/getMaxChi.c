@@ -77,7 +77,7 @@ double mychisq(int c,int d, int WH){
 }
 
 /***********************************************************************/
-int diff(int seq1, int seq2, int *range, int *polyposn)
+static int diff(int seq1, int seq2, int *range, int *polyposn)
 {
   int i; /*for looping*/
   int diffCount=0; /*counter for differences*/

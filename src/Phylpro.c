@@ -23,22 +23,23 @@
 
 /*prototypes*/
 
-int mainContinue(int argc, char **argv, int *breaks, int **polyposn, int **winlocs, double **corrs, int **targetseqs, double **quants);
-int checkSegs(int *endpoints);
-double getOverallPhylpro(int *polyposn, int *endpoints);
-void overalldoPhylpro(int *polyposn, int *endpoints, double nullquant, int maxnum,
+int main_phylpro(int argc, char **argv, int *breaks, int **polyposn, int 
+**winlocs, double **corrs, int **targetseqs, double **quants);
+static int checkSegs(int *endpoints);
+static double getOverallPhylpro(int *polyposn, int *endpoints);
+static void overalldoPhylpro(int *polyposn, int *endpoints, double nullquant, int maxnum,
                   int *numsigOut, double *corrsOut, int *winlocsOut,
                   int *targetseqsOut);
-double *getNullquant(int *polyposn, int *endpoints);
-double *getNulldist(int *polyposn, int *endpoints);
-double *quantile(double *permDistn, double *props, int num);
-void sort(double *vec);
+static double *getNullquant(int *polyposn, int *endpoints);
+static double *getNulldist(int *polyposn, int *endpoints);
+static double *quantile(double *permDistn, double *props, int num);
+static void sort(double *vec);
 static int compareDbl(const void *key1, const void *key2); /* Needed in sort */
-void permutePosn(int *polyposn, int *endpoints);
-void permute(int *polyposn, int start, int stop);
-void printResults(double *quants, int numsig,double *corrs,
+static void permutePosn(int *polyposn, int *endpoints);
+static void permute(int *polyposn, int start, int stop);
+static void printResults(double *quants, int numsig,double *corrs,
                   int *winlocs, int *targetseqs);
-int siteSpecificSummary(int numsig, double *corrs, int *winlocs, 
+static int siteSpecificSummary(int numsig, double *corrs, int *winlocs, 
 		int *targetseqs, double *siteCorrs, 
 		int *siteWinlocs, char **targnames);
 
@@ -48,13 +49,14 @@ int numBases, numBreaks, nseqs;
 int winHalfWidth, permReps;
 char **sequenceLabels;
 char **sequences;
-char programName[] = "Stepwise Phylpro";
-char version[] = "0.1";
+static char programName[] = "Stepwise Phylpro";
+static char version[] = "0.1";
 
 
 /*=================================================================*/
 
-int mainContinue(int argc, char **argv, int* breaks, int **Rpolyposn, int **Rwinlocs, double **Rcorrs, int **Rtargetseqs, double **Rquants)
+int main_phylpro(int argc, char **argv, int* breaks, int **Rpolyposn, int 
+**Rwinlocs, double **Rcorrs, int **Rtargetseqs, double **Rquants)
 {
     int *polyposn;
     int *winlocs;
@@ -148,7 +150,7 @@ int main(int argc, char **argv)
   /* 2. Read in other params such as window half-widths and previous breaks */
   breaks = readOtherData(&numBreaks);
   /*----------------------------------------------------------------*/
-  mainContinue(argc, argv, breaks, &polyposn, &winlocs, &corrs, &targetseqs, &quants);
+  main_phylpro(argc, argv, breaks, &polyposn, &winlocs, &corrs, &targetseqs, &quants);
   return(1);
 } /* end main */
   
@@ -156,7 +158,7 @@ int main(int argc, char **argv)
 /*===================================================================*/
 /* Functions used in the main program */
 
-int checkSegs(int *endpoints)
+static int checkSegs(int *endpoints)
 {
   int i,k;
   int noValidSegs=1; /* init to 1=true */
@@ -185,7 +187,7 @@ int checkSegs(int *endpoints)
 
 }
 
-double getOverallPhylpro(int *polyposn, int *endpoints)
+static double getOverallPhylpro(int *polyposn, int *endpoints)
 {
   /* Run Phylrpo over all segments of the alignment                 */
 
@@ -223,10 +225,9 @@ double getOverallPhylpro(int *polyposn, int *endpoints)
   return(mincor);
 }
 
-void overalldoPhylpro(int *polyposn, int *endpoints, double nullquant, 
+static void overalldoPhylpro(int *polyposn, int *endpoints, double nullquant, 
                   int maxnum, int *numsigOut, double *corrsOut, 
 		  int *winlocsOut, int *targetseqsOut)
-
 {
   /* Run doPhylpro over all segments of the alignment                */
 
@@ -269,7 +270,7 @@ void overalldoPhylpro(int *polyposn, int *endpoints, double nullquant,
 /**********************************************************************/
 /* getNullquant and related functions                                 */
 
-double *getNullquant(int *polyposn, int *endpoints)
+static double *getNullquant(int *polyposn, int *endpoints)
 {
   /* Find the 90th and 95th percentiles of the permutation null distribution
      of maxima. Calls getNulldist and quantile */
@@ -283,7 +284,7 @@ double *getNullquant(int *polyposn, int *endpoints)
   return(nullquants);
 }
 
-double *getNulldist(int *polyposn, int *endpoints)
+static double *getNulldist(int *polyposn, int *endpoints)
 {
   /* Return permutation null distribution of maxima */
   /* Make use of the global variable permReps */
@@ -301,7 +302,7 @@ double *getNulldist(int *polyposn, int *endpoints)
   return(permDistn);
 }
 
-void permutePosn(int *polyposn, int *endpoints)
+static void permutePosn(int *polyposn, int *endpoints)
 {
   /* Permute polymorphic sites (given by polyposn) within 
      segments (given by endpoints). Calls permute.  */
@@ -322,7 +323,7 @@ void permutePosn(int *polyposn, int *endpoints)
 }
 
 
-void permute(int *polyposn, int start, int stop)
+static void permute(int *polyposn, int start, int stop)
 {
 /* permute by drawing numbers w/o replacement from an ``urn'' and    */
 /* storing in the appropriate places in the vector ``polyposn''      */
@@ -342,7 +343,7 @@ void permute(int *polyposn, int start, int stop)
   }
 }
 
-double *quantile(double *permDistn, double *props, int num)
+static double *quantile(double *permDistn, double *props, int num)
 {
   /* Sort the permutation distribution and return the quantiles */
   double *myquants;
@@ -357,7 +358,7 @@ double *quantile(double *permDistn, double *props, int num)
   return(myquants);
 }
 
-void sort(double *vec)
+static void sort(double *vec)
 {
 
   /* Just a wrapper for the standard C library qsort function */
@@ -365,7 +366,7 @@ void sort(double *vec)
 
 }
 
-int compareDbl(const void *key1, const void *key2)
+static int compareDbl(const void *key1, const void *key2)
 {
 
   if(*(double *)key1 < *(double *)key2) 
@@ -378,7 +379,7 @@ int compareDbl(const void *key1, const void *key2)
 
 /**********************************************************************/
 
-void printResults(double *quants, int numsig, double *corrs,
+static void printResults(double *quants, int numsig, double *corrs,
                   int *winlocs, int *targetseqs)
 {
   /* quants is a vector with 10th and 5th percentiles of perm'tn distn
@@ -420,7 +421,7 @@ targnames = (char **)malloc(sizeof(char *)*numsig);
   }
 }
   
-int siteSpecificSummary(int numsig, double *corrs, int *winlocs, 
+static int siteSpecificSummary(int numsig, double *corrs, int *winlocs, 
 		int *targetseqs, double *siteCorrs, 
 		int *siteWinlocs, char **targnames)
 {

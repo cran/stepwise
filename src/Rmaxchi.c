@@ -29,7 +29,7 @@ SEXP Rmaxchi(SEXP argv, SEXP breaks, SEXP RWinHalfWidth, SEXP RpermReps)
     PROTECT(RpermReps = AS_INTEGER(RpermReps));
     permReps = INTEGER_POINTER(RpermReps)[0];
 
-    numsig =  mainContinue(2, pargv, pbreaks, &polyposn, &winlocs, &chisqs, 
+    numsig =  main_maxchi(2, pargv, pbreaks, &polyposn, &winlocs, &chisqs, 
 &pairmem1, &pairmem2, &quants);
 
     UNPROTECT(4);

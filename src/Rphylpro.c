@@ -25,7 +25,7 @@ SEXP Rphylpro(SEXP argv, SEXP breaks, SEXP RWinHalfWidth, SEXP RpermReps) {
     PROTECT(RpermReps = AS_INTEGER(RpermReps));
     permReps = INTEGER_POINTER(RpermReps)[0];
 
-    numsig =  mainContinue(2, pargv, pbreaks, &polyposn, &winlocs, &corrs, &targetseqs, &quants);
+    numsig =  main_phylpro(2, pargv, pbreaks, &polyposn, &winlocs, &corrs, &targetseqs, &quants);
 
     UNPROTECT(4);
 

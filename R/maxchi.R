@@ -1,9 +1,9 @@
 "maxchi" <-
     function(input_file, breaks, winHalfWidth, permReps) {
-    input_file<-c("Rinterface", input_file)
-    out<- .Call("Rmaxchi", input_file = as.character(input_file), 
+    input_file<-c("Rmaxchi", input_file)
+    out<- .Call("stepwise", input_file = as.character(input_file), 
        breaks = as.integer(breaks), winHalfWidth = as.integer(WinHalfWidth), 
-       permReps = as.integer(permReps), PACKAGE="MaxChi")
+       permReps = as.integer(permReps), PACKAGE="stepwise")
     if (length(out$winlocs) > 0) class(out) = "maxchi"
     out
 }

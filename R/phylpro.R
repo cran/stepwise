@@ -1,9 +1,9 @@
 "phylpro" <-
     function(input_file, breaks, winHalfWidth, permReps) {
-    input_file<-c("Rinterface", input_file)
-    out<-.Call("Rphylpro", input_file = as.character(input_file), 
+    input_file<-c("Rphylpro", input_file)
+    out<-.Call("stepwise", input_file = as.character(input_file), 
       breaks = as.integer(breaks), winHalfWidth = as.integer(WinHalfWidth), 
-      permReps = as.integer(permReps), PACKAGE="Phylpro")    
+      permReps = as.integer(permReps), PACKAGE="stepwise")    
     if (length(out$winlocs) > 0) class(out)<-"phylpro"
     out
 }

@@ -23,24 +23,24 @@
 
 /*prototypes*/
 
-int mainContinue(int argc, char **argv, int *breaks, int **polyposn, int 
+int main_maxchi(int argc, char **argv, int *breaks, int **polyposn, int 
 **winlocs, double **chisqs, int **pairmem1, int **pairmem2, double 
 **quants);
-int checkSegs(int *endpoints);
-double getOverallMaxChi(int *polyposn, int *endpoints);
-void overalldoChi(int *polyposn, int *endpoints, double nullquant, int maxnum,
+static int checkSegs(int *endpoints);
+static double getOverallMaxChi(int *polyposn, int *endpoints);
+static void overalldoChi(int *polyposn, int *endpoints, double nullquant, int maxnum,
                   int *numsigOut, double *chisqsOut, int *winlocsOut,
                   int *pairmem1Out, int *pairmem2Out);
-double *getNullquant(int *polyposn, int *endpoints);
-double *getNulldist(int *polyposn, int *endpoints);
-double *quantile(double *permDistn, double *props, int num);
-void sort(double *vec);
+static double *getNullquant(int *polyposn, int *endpoints);
+static double *getNulldist(int *polyposn, int *endpoints);
+static double *quantile(double *permDistn, double *props, int num);
+static void sort(double *vec);
 static int compareDbl(const void *key1, const void *key2); /* Needed in sort */
-void permutePosn(int *polyposn, int *endpoints);
-void permute(int *polyposn, int start, int stop);
-void printResults(double *quants, int numsig,double *chisqs,
+static void permutePosn(int *polyposn, int *endpoints);
+static void permute(int *polyposn, int start, int stop);
+static void printResults(double *quants, int numsig,double *chisqs,
                   int *winlocs, int *pairmem1, int *pairmem2);
-int siteSpecificSummary(int numsig, double *chisqs, int *winlocs, 
+static int siteSpecificSummary(int numsig, double *chisqs, int *winlocs, 
 		int *pairmem1, int *pairmem2, double *siteChisqs, 
 		int *siteWinlocs, char **pairs);
 
@@ -50,13 +50,13 @@ int numBases, numBreaks, nseqs;
 int winHalfWidth, permReps;
 char **sequenceLabels;
 char **sequences;
-char programName[] = "Stepwise MaxChi";
-char version[] = "0.1";
+static char programName[] = "Stepwise MaxChi";
+static char version[] = "0.1";
 
 
 /*=========================================================================*/
 
-int mainContinue(int argc, char **argv, int* breaks, int **Rpolyposn, int 
+int main_maxchi(int argc, char **argv, int* breaks, int **Rpolyposn, int 
 **Rwinlocs, double **Rchisqs, int **Rpairmem1, int **Rpairmem2, double 
 **Rquants) 
 {
@@ -141,6 +141,7 @@ int mainContinue(int argc, char **argv, int* breaks, int **Rpolyposn, int
   return(numsig);
 }
 
+#ifdef C_PROGRAM
 int main(int argc, char **argv)
 {
   int *polyposn;  /*vector of posns of polysites in original alignment */
@@ -157,16 +158,18 @@ int main(int argc, char **argv)
   /* 2. Read in other params such as window half-widths and previous breaks */
   breaks = readOtherData(&numBreaks);
 
-  mainContinue(argc, argv, breaks, &polyposn, &winlocs, &chisqs, &pairmem1, 
+  main_maxchi(argc, argv, breaks, &polyposn, &winlocs, &chisqs, &pairmem1, 
 &pairmem2, &quants);
 
   return(0);
   } /* end main */  
 
+#endif
+
 /*===================================================================*/
 /* Functions used in the main program */
 
-int checkSegs(int *endpoints)
+static int checkSegs(int *endpoints)
 {
   int i,k;
   int noValidSegs=1; /* init to 1=true */
@@ -195,7 +198,8 @@ int checkSegs(int *endpoints)
 
 }
 
-double getOverallMaxChi(int *polyposn, int *endpoints)
+/*===================================================================*/
+static double getOverallMaxChi(int *polyposn, int *endpoints)
 {
   /* Run MaxChi over all segments of the alignment                 */
 
@@ -233,7 +237,9 @@ double getOverallMaxChi(int *polyposn, int *endpoints)
   return(maxchi);
 }
 
-void overalldoChi(int *polyposn, int *endpoints, double nullquant, int maxnum,
+/*===================================================================*/
+static void overalldoChi(int *polyposn, int *endpoints, double nullquant, 
+                  int maxnum,
                   int *numsigOut, double *chisqsOut, int *winlocsOut,
                   int *pairmem1Out, int *pairmem2Out)
 
@@ -275,7 +281,7 @@ void overalldoChi(int *polyposn, int *endpoints, double nullquant, int maxnum,
 /**********************************************************************/
 /* getNullquant and related functions                                 */
 
-double *getNullquant(int *polyposn, int *endpoints)
+static double *getNullquant(int *polyposn, int *endpoints)
 {
   /* Find the 90th and 95th percentiles of the permutation null distribution
      of maxima. Calls getNulldist and quantile */
@@ -289,7 +295,7 @@ double *getNullquant(int *polyposn, int *endpoints)
   return(nullquants);
 }
 
-double *getNulldist(int *polyposn, int *endpoints)
+static double *getNulldist(int *polyposn, int *endpoints)
 {
   /* Return permutation null distribution of maxima */
   /* Make use of the global variable permReps */
@@ -307,7 +313,7 @@ double *getNulldist(int *polyposn, int *endpoints)
   return(permDistn);
 }
 
-void permutePosn(int *polyposn, int *endpoints)
+static void permutePosn(int *polyposn, int *endpoints)
 {
   /* Permute polymorphic sites (given by polyposn) within 
      segments (given by endpoints). Calls permute.  */
@@ -328,7 +334,7 @@ void permutePosn(int *polyposn, int *endpoints)
 }
 
 
-void permute(int *polyposn, int start, int stop)
+static void permute(int *polyposn, int start, int stop)
 {
 /* permute by drawing numbers w/o replacement from an ``urn'' and    */
 /* storing in the appropriate places in the vector ``polyposn''      */
@@ -349,7 +355,7 @@ void permute(int *polyposn, int start, int stop)
   }
 }
 
-double *quantile(double *permDistn, double *props, int num)
+static double *quantile(double *permDistn, double *props, int num)
 {
   /* Sort the permutation distribution and return the quantiles */
   double *myquants;
@@ -364,7 +370,7 @@ double *quantile(double *permDistn, double *props, int num)
   return(myquants);
 }
 
-void sort(double *vec)
+static void sort(double *vec)
 {
 
   /* Just a wrapper for the standard C library qsort function */
@@ -372,9 +378,8 @@ void sort(double *vec)
 
 }
 
-int compareDbl(const void *key1, const void *key2)
+static int compareDbl(const void *key1, const void *key2)
 {
-
   if(*(double *)key1 < *(double *)key2) 
     return -1;
   else if(*(double *)key1 > *(double *)key2) 
@@ -385,7 +390,7 @@ int compareDbl(const void *key1, const void *key2)
 
 /**********************************************************************/
 
-void printResults(double *quants, int numsig, double *chisqs,
+static void printResults(double *quants, int numsig, double *chisqs,
                   int *winlocs, int *pairmem1, int *pairmem2)
 {
   /* quants is a vector with 90th and 95th percentiles of perm'tn distn
@@ -426,7 +431,7 @@ char **pairs = (char **)malloc(numsig * sizeof(char *));
   return;
 }
   
-int siteSpecificSummary(int numsig, double *chisqs, int *winlocs, 
+static int siteSpecificSummary(int numsig, double *chisqs, int *winlocs, 
 		int *pairmem1, int *pairmem2, double *siteChisqs, 
 		int *siteWinlocs, char **pairs)
 {
