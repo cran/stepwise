@@ -15,5 +15,6 @@ Phylpro.so: ${OBJECT-FILES-PHYLPRO}
 	${CC} -shared -o $@ ${OBJECT-FILES-PHYLPRO} ${LIBRARIES}
 
 clean:
-	rm init.o getMaxChi.o MaxChi.o getPhylpro.o Phylpro.o
+	rm init.o getMaxChi.o MaxChi.o getPhylpro.o Phylpro.o\
+        Rphylpro.o Rmaxchi.o MaxChi.so Phylpro.so
 

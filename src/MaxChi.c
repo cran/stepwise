@@ -138,7 +138,6 @@ int mainContinue(int argc, char **argv, int* breaks, int **Rpolyposn, int
   *Rpairmem2 =  pairmem2;
   *Rchisqs   =  chisqs;
   *Rquants   =  quants;
-
   return(numsig);
 }
 

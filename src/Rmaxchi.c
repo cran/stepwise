@@ -51,7 +51,7 @@ SEXP Rmaxchi(SEXP argv, SEXP breaks, SEXP RWinHalfWidth, SEXP RpermReps)
     PROTECT(Rpolyposn = NEW_INTEGER(numBases));
     pRpolyposn = INTEGER_POINTER(Rpolyposn);
     for(i = 0; i < numBases; i++) 
-	pRpolyposn[i] = (int)&polyposn[i] + 1;
+	pRpolyposn[i] = polyposn[i] +1;
     PROTECT(Rquants = NEW_NUMERIC(2));
     NUMERIC_POINTER(Rquants)[0] = quants[0];
     NUMERIC_POINTER(Rquants)[1] = quants[1];
