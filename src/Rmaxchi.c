@@ -13,7 +13,7 @@ SEXP Rmaxchi(SEXP argv, SEXP breaks, SEXP RWinHalfWidth, SEXP RpermReps)
     int *pbreaks;
     int val_len = 6;
     SEXP Rpolyposn, Rchisqs, Rwinlocs, Rpairmem1, Rpairmem2, Rquants, val, val_nm;
-    double *pRchisqs, *pRquants;
+    double *pRchisqs;
     int *pRpolyposn, *pRwinlocs;
 
     PROTECT(argv = AS_CHARACTER(argv));

@@ -1,0 +1,23 @@
+# Make file for MaxChi and Phylpro
+
+include $(RHOME)/src/gnuwin32/MkRules
+CC = gcc
+LIB1 = -I${R_HOME}/include
+OBJECT-FILES-MAXCHI = init.o getMaxChi.o MaxChi.o Rmaxchi.o
+OBJECT-FILES-PHYLPRO = init.o getPhylpro.o Phylpro.o Rphylpro.o
+DLLLIBS = -L$(RHOME)/src/gnuwin32 -lrpcrt4 -lg2c -lRblas -lR
+
+all: MaxChi.dll Phylpro.dll
+
+%.o: %.c
+	$(CC) $(LIB1) -c $<
+
+MaxChi.a: $(OBJECT-FILES-MAXCHI)
+Phylpro.a: ${OBJECT-FILES-PHYLPRO}
+MaxChi.dll: MaxChi.a
+Phylpro.dll: Phylpro.a
+
+clean:
+	rm init.o getMaxChi.o MaxChi.o getPhylpro.o Phylpro.o\
+        Rphylpro.o Rmaxchi.o MaxChi.dll Phylpro.dll
+

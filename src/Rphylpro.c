@@ -8,7 +8,7 @@ SEXP Rphylpro(SEXP argv, SEXP breaks, SEXP RWinHalfWidth, SEXP RpermReps) {
 
     int numsig=0, val_len=5, i, *winlocs, *polyposn, *pbreaks, *targetseqs, *pRpolyposn, *pRwinlocs;
     char *pargv[2], pargvSize[2][15]; 
-    double *quants, *corrs, *pRcorrs, *pRquants;
+    double *quants, *corrs, *pRcorrs;
     SEXP Rpolyposn, Rcorrs, Rwinlocs, Rtargetseqs, Rquants, val_nm, val=R_NilValue;
     *pargv = &pargvSize[0][0];
 
