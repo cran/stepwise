@@ -420,3 +420,11 @@ int **dynamicArray(int nrows, int ncolumns) {
      return array;
 }
 
+/***********************************************************************/ 
+/*  free two-demensional int array                   */
+void freedynamicArray(int **array) {
+     int i;
+
+     free(array[0]);
+     free(array);
+}

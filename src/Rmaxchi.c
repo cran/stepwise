@@ -3,6 +3,10 @@
 /* #include "getMaxChi.h" */
 #include <R.h>
 #include <Rdefines.h>
+int main_maxchi(int argc, char **argv, int *breaks, int **polyposn, int
+**winlocs, double **chisqs, int **pairmem1, int **pairmem2, double
+**quants);
+
 
 SEXP Rmaxchi(SEXP argv, SEXP breaks, SEXP RWinHalfWidth, SEXP RpermReps)
 {
@@ -48,13 +52,19 @@ SEXP Rmaxchi(SEXP argv, SEXP breaks, SEXP RWinHalfWidth, SEXP RpermReps)
         SET_STRING_ELT(Rpairmem1, i, mkChar(sequenceLabels[pairmem1[i]]));
         SET_STRING_ELT(Rpairmem2, i, mkChar(sequenceLabels[pairmem2[i]]));
     }   
+    free(chisqs);
+    free(winlocs);
+    free(pairmem1);
+    free(pairmem2);
     PROTECT(Rpolyposn = NEW_INTEGER(numBases));
     pRpolyposn = INTEGER_POINTER(Rpolyposn);
     for(i = 0; i < numBases; i++) 
 	pRpolyposn[i] = polyposn[i] +1;
+    free(polyposn);
     PROTECT(Rquants = NEW_NUMERIC(2));
     NUMERIC_POINTER(Rquants)[0] = quants[0];
     NUMERIC_POINTER(Rquants)[1] = quants[1];
+    free(quants);
 
     PROTECT(val_nm = allocVector(STRSXP,6));
     SET_STRING_ELT(val_nm, 0, mkChar("polyposn"));

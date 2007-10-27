@@ -140,6 +140,7 @@ int main_maxchi(int argc, char **argv, int* breaks, int **Rpolyposn, int
   *Rpairmem2 =  pairmem2;
   *Rchisqs   =  chisqs;
   *Rquants   =  quants;
+  free(endpoints);
   return(numsig);
 }
 
@@ -236,6 +237,7 @@ static double getOverallMaxChi(int *polyposn, int *endpoints)
 	  maxchi=newchi;
     }
   }
+  free(myvec);
   return(maxchi);
 }
 
@@ -249,7 +251,6 @@ static void overalldoChi(int *polyposn, int *endpoints, double nullquant,
   /* Run doChi over all segments of the alignment                 */
 
   int i, j, k, *myvec;
-
   myvec = (int *)malloc(numBases*sizeof(int));
   /* As noted above in checkSegs, the first segment is special and needs
    * to be treated separately */
@@ -278,6 +279,7 @@ static void overalldoChi(int *polyposn, int *endpoints, double nullquant,
             chisqsOut, winlocsOut, pairmem1Out, pairmem2Out);
     }
   }
+  free(myvec);
 }
 
 /**********************************************************************/
@@ -294,6 +296,7 @@ static double *getNullquant(int *polyposn, int *endpoints)
   props[1]=0.95;
   permDistn = getNulldist(polyposn, endpoints);
   nullquants = quantile(permDistn, props, 2); /* ask for the 2 quantiles */
+  free(permDistn);
   return(nullquants);
 }
 
@@ -306,12 +309,12 @@ static double *getNulldist(int *polyposn, int *endpoints)
   int *mypolyposn; /* to be filled with a permutation */
   mypolyposn = copyIntVec(polyposn,numBases); 
 
-
   permDistn = (double *)malloc(permReps*sizeof(double));
   for(i=0; i<permReps; i++) {
     permutePosn(mypolyposn, endpoints); /* permute sites within segments */
     permDistn[i]=getOverallMaxChi(mypolyposn, endpoints);
   }
+  free(mypolyposn);
   return(permDistn);
 }
 
@@ -355,6 +358,7 @@ static void permute(int *polyposn, int start, int stop)
        urn[j-1]=urn[j];
     urnLength--;
   }
+  free(urn);
 }
 
 static double *quantile(double *permDistn, double *props, int num)

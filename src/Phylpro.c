@@ -222,6 +222,7 @@ static double getOverallPhylpro(int *polyposn, int *endpoints)
 	  mincor=newcor;
     }
   }
+  free(myvec);
   return(mincor);
 }
 
@@ -265,6 +266,7 @@ static void overalldoPhylpro(int *polyposn, int *endpoints, double nullquant,
             corrsOut, winlocsOut, targetseqsOut);
     }
   }
+  free(myvec);
 }
 
 /**********************************************************************/
@@ -281,6 +283,7 @@ static double *getNullquant(int *polyposn, int *endpoints)
   props[1]=0.05; 
   permDistn = getNulldist(polyposn, endpoints);
   nullquants = quantile(permDistn, props, 2); /* ask for the 2 quantiles */
+  free(props);
   return(nullquants);
 }
 
@@ -299,6 +302,7 @@ static double *getNulldist(int *polyposn, int *endpoints)
     permutePosn(mypolyposn, endpoints); /* permute sites within segments */
     permDistn[i]=getOverallPhylpro(mypolyposn, endpoints);
   }
+  free(mypolyposn);
   return(permDistn);
 }
 
@@ -341,6 +345,7 @@ static void permute(int *polyposn, int start, int stop)
        urn[j-1]=urn[j];
     urnLength--;
   }
+  free(urn);
 }
 
 static double *quantile(double *permDistn, double *props, int num)
@@ -351,8 +356,10 @@ static double *quantile(double *permDistn, double *props, int num)
 
   myquants = (double *)malloc(sizeof(double)*num);
   sort(permDistn);
+
   for(i=0;i<num;i++) {
-    indx=floor(props[i]*permReps)-1; /* index of our quantile; -1 for C-indexing. */
+    indx=max(floor(props[i]*permReps)-1,0); 
+   /* index of our quantile; -1 for C-indexing. Don't go below 0 though*/
     myquants[i]=permDistn[indx]; 
   }
   return(myquants);

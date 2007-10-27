@@ -12,7 +12,6 @@
   Each row represents a genetic sequence.
   Each column is a nucleotide in that genetic sequence. 
   }
-}
 \details{
 A simulated data set analysed by Graham et al. (2004) to illustrate the stepwise recombination detection methods. The alignment was simulated using Treevolve version 1.3 (Grassly and Holmes 1997). For details on the parameter values used in the simulation, see
 Graham et al. (2004).

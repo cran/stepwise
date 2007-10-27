@@ -1,0 +1,19 @@
+citHeader("To cite stepwise in publications use:")
+
+citEntry(entry="Article",
+         title = "Stepwise detection of recombination breakpoints in sequence alignments.",
+         author = personList(as.person("J. Graham"),
+                             as.person("B. McNeney"),
+                             as.person("F. Seillier-Moiseiwitsch")),
+         journal = "Bioinformatics",
+         volume      = 21,
+         year         = 2005,
+         pages       ="589--595",
+         url          = "http://stat-db.stat.sfu.ca:8080/statgen/research/stepwise",
+
+         textVersion =
+       paste("Graham J, McNeney B and Seillier-Moiseiwitsch F (2005).",
+     "Stepwise detection of recombination breakpoints in sequence alignments.",
+     "Bioinformatics, 21:589-595")
+)
+

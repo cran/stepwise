@@ -62,6 +62,8 @@ double getMaxChi(int *polyposn, int nsites, int winHalfWidth)
     /*end j-loop and complete the left and right difference matrices*/
   } /*finish the loop through possible window locations*/
      
+  freedynamicArray(rprdiffs);
+  freedynamicArray(lprdiffs);
   return(maxChi);
 }
 
@@ -179,6 +181,9 @@ void doChi(int *polyposn, int nsites, int winHalfWidth, double nullquant,
         } /*end k-loop*/
     /*end j-loop and complete the left and right difference matrices*/
   } /*finish the loop through possible window locations*/
+ 
+  freedynamicArray(rprdiffs);
+  freedynamicArray(lprdiffs);
      
   *(numsigOut)=numsig; /* update the output variable */
 }

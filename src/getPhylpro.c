@@ -81,6 +81,11 @@ double getMinCor(int *polyposn, int nsites, int winHalfWidth)
        if(myCor<minCor) minCor=myCor;
     } /*finish loop over target seqs*/
   } /*finish the loop through possible window locations*/
+
+  freedynamicArray(lprdiffs);
+  freedynamicArray(rprdiffs);
+  free(lDist);
+  free(rDist);
      
   return(minCor);
 }
@@ -219,6 +224,10 @@ void doPhylpro(int *polyposn, int nsites, int winHalfWidth, double nullquant,
        } /*end if*/
     } /*finish loop over target seqs*/
   } /*finish the loop through possible window locations*/
+  freedynamicArray(lprdiffs);
+  freedynamicArray(rprdiffs);
+  free(lDist);
+  free(rDist);
      
   numsigOut[0]=numsig;
 }

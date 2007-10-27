@@ -56,5 +56,6 @@ int eof(FILE *f); /* from Phylip */
 int eoln(FILE *f); /* from Phylip */
 
 int **dynamicArray(int nrows, int ncolumns); 
+void freedynamicArray(int **array);
 
 #endif /* _INIT_H_ */

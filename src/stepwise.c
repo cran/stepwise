@@ -1,6 +1,9 @@
 #include <R.h>
 #include <Rdefines.h>
 #include <string.h>
+SEXP Rmaxchi(SEXP argv, SEXP breaks, SEXP RWinHalfWidth, SEXP RpermReps);
+SEXP Rphylpro(SEXP argv, SEXP breaks, SEXP RWinHalfWidth, SEXP RpermReps);
+
 
 SEXP stepwise(SEXP argv, SEXP breaks, SEXP RWinHalfWidth, SEXP RpermReps) {
     char pargv[8];

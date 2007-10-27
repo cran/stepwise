@@ -3,6 +3,8 @@
 /* #include "getPhylpro.h" */
 #include <R.h>
 #include <Rdefines.h>
+int main_phylpro(int argc, char **argv, int *breaks, int **polyposn, int
+**winlocs, double **corrs, int **targetseqs, double **quants);
 
 SEXP Rphylpro(SEXP argv, SEXP breaks, SEXP RWinHalfWidth, SEXP RpermReps) {
 
@@ -43,13 +45,18 @@ SEXP Rphylpro(SEXP argv, SEXP breaks, SEXP RWinHalfWidth, SEXP RpermReps) {
 	pRwinlocs[i] = winlocs[i];
         SET_STRING_ELT(Rtargetseqs, i, mkChar(sequenceLabels[targetseqs[i]]));
     }   
+    free(corrs); 
+    free(winlocs);
+    free(targetseqs);
     PROTECT(Rpolyposn = NEW_INTEGER(numBases));
     pRpolyposn = INTEGER_POINTER(Rpolyposn);
     for(i = 0; i < numBases; i++) 
         pRpolyposn[i] = polyposn[i]+1;
+    free(polyposn);
     PROTECT(Rquants = NEW_NUMERIC(2));
     NUMERIC_POINTER(Rquants)[0] = quants[0];
     NUMERIC_POINTER(Rquants)[1] = quants[1];
+    free(quants);
 
     PROTECT(val_nm = allocVector(STRSXP, val_len)); 
     SET_STRING_ELT(val_nm, 0, mkChar("polyposn"));
