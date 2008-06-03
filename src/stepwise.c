@@ -6,7 +6,7 @@ SEXP Rphylpro(SEXP argv, SEXP breaks, SEXP RWinHalfWidth, SEXP RpermReps);
 
 
 SEXP stepwise(SEXP argv, SEXP breaks, SEXP RWinHalfWidth, SEXP RpermReps) {
-    char pargv[8];
+    char pargv[9];
     SEXP val;
     PROTECT(argv = AS_CHARACTER(argv));
     strcpy(pargv, CHAR(STRING_ELT(argv, 0)));
