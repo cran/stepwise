@@ -6,10 +6,12 @@ SEXP Rphylpro(SEXP argv, SEXP breaks, SEXP RWinHalfWidth, SEXP RpermReps);
 
 
 SEXP stepwise(SEXP argv, SEXP breaks, SEXP RWinHalfWidth, SEXP RpermReps) {
-    char pargv[9];
+     const char *pargv; 
+     pargv = CHAR(STRING_ELT(argv, 0)); 
+    /* char pargv[9]; */
     SEXP val;
     PROTECT(argv = AS_CHARACTER(argv));
-    strcpy(pargv, CHAR(STRING_ELT(argv, 0)));
+    /* strcpy(pargv, CHAR(STRING_ELT(argv, 0))); */
 
     if (strcmp("Rmaxchi", pargv) == 0) {
 	val = (SEXP)Rmaxchi(argv, breaks, RWinHalfWidth, RpermReps);

@@ -31,12 +31,12 @@
     } # end of for loop
     cat("--------------------------------------------------\n");
     cat("There were", sigSites,"site-specific MaxChi statistics significant at the\n");
-    cat("10 percent level (90th percentile = ", sprintf("%5.3lf", object$quants[1]), 
-    ", 95th percentile = ",sprintf("%5.3lf", object$quants[2]),"):\n\n", sep="");
+    cat("10 percent level (90th percentile = ", sprintf("%5.3f", object$quants[1]), 
+    ", 95th percentile = ",sprintf("%5.3f", object$quants[2]),"):\n\n", sep="");
     cat ("Number Location  MaxChi   pairs\n")
     for (i in 1:length(siteWinlocs)) {
         if(siteChisqs[i]>object$quants[1]) star<-"*" else star<-" "
-        cat(sprintf("%6d  %7d  %5.3lf%s   %s\n",i, as.integer(siteWinlocs[i]), siteChisqs[i], star,  pairs[i]));
+        cat(sprintf("%6d  %7d  %5.3f%s   %s\n",i, as.integer(siteWinlocs[i]), siteChisqs[i], star,  pairs[i]));
     }
     cat("--------------------------------------------------\n");
     cat("Notes - \"Location\" is the polymorphic site just before the proposed breakpoint.\n");
