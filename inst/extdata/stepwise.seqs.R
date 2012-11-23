@@ -21,4 +21,6 @@ stepwise.seqs<-function(file, remGaps=TRUE) {
 return(dat)	
 }
 
-stepwise<-stepwise.seqs("simulinfile")
+stepwise.seqs<-stepwise.seqs("simulinfile.txt")
+save(stepwise.seqs,file="stepwise.seqs.RData")
+

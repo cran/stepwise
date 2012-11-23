@@ -20,6 +20,7 @@
 
 #include "init.h"
 #include "getMaxChi.h"
+#include <R.h>
 
 /*prototypes*/
 
@@ -86,18 +87,18 @@ int main_maxchi(int argc, char **argv, int* breaks, int **Rpolyposn, int
 				     modifies the global variable numBases*/
 
   if (!strcmp("maxchi", argv[0]) || !strcmp("./maxchi", argv[0])) {
-    fprintf(stdout,"\nThere are %d unique sequences in the %d provided.\n\n",nseqs, orignseqs);
-    fprintf(stdout,"There are %d ungapped polymorphic sites:\n",
+    Rprintf("\nThere are %d unique sequences in the %d provided.\n\n",nseqs, orignseqs);
+    Rprintf("There are %d ungapped polymorphic sites:\n",
 	    numBases);
     for(i=0; i<numBases; i++) {/* print out a list of polymorphic sites */
-      fprintf(stdout,"%d ", polyposn[i]+1);
+      Rprintf("%d ", polyposn[i]+1);
       counter++;
       if(counter>19) { 
-	fprintf(stdout,"\n");
+	Rprintf("\n");
 	counter=0;
       }
     }
-    fprintf(stdout,"\n");
+    Rprintf("\n");
   } 
 
 
@@ -107,8 +108,8 @@ int main_maxchi(int argc, char **argv, int* breaks, int **Rpolyposn, int
   noValidSegs = checkSegs(endpoints); /* returns 1 if all segments are 
 					    smaller than window width */
   if(noValidSegs == 1) {
-    printf("\nNo further steps are possible: specified window half-width larger than number\n");
-    printf("of polymorphic sites in all segments defined by previously-declared breaks\n\n");
+    Rprintf("\nNo further steps are possible: specified window half-width larger than number\n");
+    Rprintf("of polymorphic sites in all segments defined by previously-declared breaks\n\n");
   } else {
     /*-------------------------------------------------------------*/
     /* 4. Get the 90th and 95th percentiles of the permutation distribution 
@@ -154,9 +155,9 @@ int main(int argc, char **argv)
   int *breaks;  /*vector of break points*/
 
   /* 0. Print out description of the program */
-  printf("-----------------------------------------------\n");
-  printf("%s, version %s output\n",programName,version);
-  printf("-----------------------------------------------\n");
+  Rprintf("-----------------------------------------------\n");
+  Rprintf("%s, version %s output\n",programName,version);
+  Rprintf("-----------------------------------------------\n");
   /*----------------------------------------------------------------*/
   /* 2. Read in other params such as window half-widths and previous breaks */
   breaks = readOtherData(&numBreaks);
@@ -414,25 +415,25 @@ char **pairs = (char **)malloc(numsig * sizeof(char *));
   if(numsig>0) {
     sigSites = siteSpecificSummary(numsig, chisqs, winlocs, pairmem1,
 	       pairmem2, siteChisqs, siteWinlocs, pairs);
-    printf("-----------------------------------------------\n");
-    printf("There were %d site-specific MaxChi statistics significant at the\n", sigSites);
-    printf("10 percent level (90th percentile = %5.3f, 95th percentile = %5.3f):\n\n", quants[0],quants[1]);
-    printf("Number Location  MaxChi   pairs\n");
+    Rprintf("-----------------------------------------------\n");
+    Rprintf("There were %d site-specific MaxChi statistics significant at the\n", sigSites);
+    Rprintf("10 percent level (90th percentile = %5.3f, 95th percentile = %5.3f):\n\n", quants[0],quants[1]);
+    Rprintf("Number Location  MaxChi   pairs\n");
     for(i=0; i<sigSites; i++) {
       if(siteChisqs[i]>quants[1]) {
-	printf("%6d   %6d  %5.3f*  %s\n",
+	Rprintf("%6d   %6d  %5.3f*  %s\n",
 	       (i+1), siteWinlocs[i], siteChisqs[i], pairs[i]);
       } else {
-	printf("%6d   %6d  %5.3f   %s\n",
+	Rprintf("%6d   %6d  %5.3f   %s\n",
 	       (i+1), siteWinlocs[i], siteChisqs[i],  pairs[i]);
       }
     }
 
-    printf("------------------------------------------------\n");
-    printf("Notes - \"Location\" is the polymorphic site just before the proposed breakpoint.\n");
-    printf("      - MaxChi statistics significant at the 5 percent level indicated by a * \n\n");
+    Rprintf("------------------------------------------------\n");
+    Rprintf("Notes - \"Location\" is the polymorphic site just before the proposed breakpoint.\n");
+    Rprintf("      - MaxChi statistics significant at the 5 percent level indicated by a * \n\n");
   } else {
-    printf("  No significant MaxChi statistics found.\n\n");
+    Rprintf("  No significant MaxChi statistics found.\n\n");
   }
   return;
 }

@@ -1,6 +1,8 @@
 #include "getPhylpro.h"
 #include "init.h"
 #include <stdlib.h>
+#include <R.h>
+
 /*-----------------------------------------------------------*/
 /*                                                           */
 /* Jinko Graham                     Brad McNeney             */
@@ -79,18 +81,18 @@ int main_phylpro(int argc, char **argv, int* breaks, int **Rpolyposn, int
   polyposn = make_initial_index(); /*Indices of variable, non-gap sites:
 				  modifies the global variable numBases*/
   if (!strcmp("phylpro", argv[0]) || !strcmp("./phylpro", argv[0])) {
-  fprintf(stdout,"\nThere are %d unique sequences in the %d provided.\n\n",nseqs,orignseqs);
-  fprintf(stdout,"There are %d ungapped polymorphic sites:\n",
+  Rprintf("\nThere are %d unique sequences in the %d provided.\n\n",nseqs,orignseqs);
+  Rprintf("There are %d ungapped polymorphic sites:\n",
 	  numBases);
   for(i=0; i<numBases; i++) { /* print a list of polymorphic sites */
-    fprintf(stdout,"%d ", polyposn[i]+1);
+    Rprintf("%d ", polyposn[i]+1);
     counter++;
     if(counter>19) { 
-       fprintf(stdout,"\n");
+       Rprintf("\n");
        counter=0;
     }
   }
-  fprintf(stdout,"\n");
+  Rprintf("\n");
   }
   /* Find the endpoints of segments defined by previously found breaks, */
   /* where endpoints are indices for the polyposn just before a breakpoint. */
@@ -98,8 +100,8 @@ int main_phylpro(int argc, char **argv, int* breaks, int **Rpolyposn, int
   noValidSegs = checkSegs(endpoints); /* returns 1 if all segments are 
 					    smaller than window width */
   if(noValidSegs == 1) {
-    printf("\nNo further steps are possible: specified window half-width larger than number\n");
-    printf("of polymorphic sites in all segments defined by previously-declared breaks\n\n");
+    Rprintf("\nNo further steps are possible: specified window half-width larger than number\n");
+    Rprintf("of polymorphic sites in all segments defined by previously-declared breaks\n\n");
   } else {
     /*----------------------------------------------------------------*/
     /* 4. Get the 90th and 95th percentiles of the permutation distribution 
@@ -142,9 +144,9 @@ int main(int argc, char **argv)
   double *corrs;
 
   /* 0. Print out description of the program */
-  printf("-----------------------------------------------\n");
-  printf("%s, version %s output\n",programName,version);
-  printf("-----------------------------------------------\n");
+  Rprintf("-----------------------------------------------\n");
+  Rprintf("%s, version %s output\n",programName,version);
+  Rprintf("-----------------------------------------------\n");
 
   /*----------------------------------------------------------------*/
   /* 2. Read in other params such as window half-widths and previous breaks */
@@ -407,24 +409,24 @@ targnames = (char **)malloc(sizeof(char *)*numsig);
   if(numsig>0) {
     sigSites = siteSpecificSummary(numsig, corrs, winlocs, targetseqs,
         siteCorrs, siteWinlocs, targnames);
-    printf("-----------------------------------------------\n");
-    printf("There were %d site-specific minimum correlation statistics significant at the\n", sigSites);
-    printf("10 percent level (10th percentile = %5.3f, 5th percentile = %5.3f):\n\n", quants[0],quants[1]);
-    printf("Number Location  MinCor   targets\n");
+    Rprintf("-----------------------------------------------\n");
+    Rprintf("There were %d site-specific minimum correlation statistics significant at the\n", sigSites);
+    Rprintf("10 percent level (10th percentile = %5.3f, 5th percentile = %5.3f):\n\n", quants[0],quants[1]);
+    Rprintf("Number Location  MinCor   targets\n");
     for(i=0; i<sigSites; i++) {
       if(siteCorrs[i]<quants[1]) {
-	 printf("%6d   %6d  %5.3f*  %s\n",
+	 Rprintf("%6d   %6d  %5.3f*  %s\n",
            (i+1), siteWinlocs[i], siteCorrs[i], targnames[i]);
       } else {
-        printf("%6d   %6d  %5.3f   %s\n",
+        Rprintf("%6d   %6d  %5.3f   %s\n",
            (i+1), siteWinlocs[i], siteCorrs[i],  targnames[i]);
       }
     }
-    printf("------------------------------------------------\n");
-    printf("Notes - \"Location\" is the polymorphic site just before the proposed breakpoint.\n");
-    printf("      - MinCor statistics significant at the 5 percent level indicated by a * \n\n");
+    Rprintf("------------------------------------------------\n");
+    Rprintf("Notes - \"Location\" is the polymorphic site just before the proposed breakpoint.\n");
+    Rprintf("      - MinCor statistics significant at the 5 percent level indicated by a * \n\n");
   } else {
-    printf("  No significant minimum correlation statistics found:\n\n");
+    Rprintf("  No significant minimum correlation statistics found:\n\n");
   }
 }
   

@@ -1,6 +1,8 @@
 #include "init.h"
 #include <time.h>
 #include <ctype.h>
+#include <R.h>
+#include <Rdefines.h> 
 
 /* global variables */
 int numBases, numBreaks, nseqs;
@@ -52,13 +54,11 @@ void readPhylipData(int argc, char **argv)
     strcpy(infileName,"infile");
     
   if( (infile=fopen(infileName,"r")) == NULL ) {
-    fprintf(stderr,"%s: Error in opening input file %s\n",infileName,
+    error("%s: Error in opening input file %s\n",infileName,
 	    argv[1]);
-    exit(0);
   }
   if(feof(infile)){
-    fprintf(stderr, "%s: Unable to read input from %s\n",argv[0],infileName);
-    exit(0);
+    error("%s: Unable to read input from %s\n",argv[0],infileName);
   }
   fscanf(infile, "%d %d", &nseqs, &numBases);
   fscanf(infile, "%*[^\n]"); 
@@ -70,9 +70,7 @@ void readPhylipData(int argc, char **argv)
   for(i=0;i<nseqs;i++) {
     for(j=0;j<LABEL_LENGTH;j++) {
       if (eof(infile) || eoln(infile)){
-	fprintf(stderr,"ERROR: END-OF-LINE OR END-OF-FILE IN");
-        fprintf(stderr," THE MIDDLE OF A SPECIES NAME\n");
-        exit(0);
+	error("ERROR: END-OF-LINE OR END-OF-FILE IN THE MIDDLE OF A SPECIES NAME\n");
       }
       sequenceLabels[i][j] = getc(infile);
     }
@@ -85,9 +83,8 @@ void readPhylipData(int argc, char **argv)
 	  continue;
 	ch=toupper(ch);
 	if (strchr("ABCDGHKMNRSTUVWXY?O-.",ch) == NULL){
-	  printf("ERROR: BAD BASE:%c AT POSITION%5d OF SPECIES %3d\n",
+	  error("ERROR: BAD BASE:%c AT POSITION%5d OF SPECIES %3d\n",
 		 ch, j, i);
-	  exit(-1);
 	}
 	j++;
 	if (ch == '.')
@@ -104,7 +101,7 @@ void readPhylipData(int argc, char **argv)
     getc(infile);
   }
   if (!strcmp("maxchi", argv[0]) || !strcmp("./maxchi", argv[0])) 
-    fprintf(stdout, "\nRead data from %s: sample size %d with %d bases\n",
+    Rprintf("\nRead data from %s: sample size %d with %d bases\n",
 	    infileName,nseqs,numBases);
 }
 
@@ -115,8 +112,9 @@ void printSequences()
 
   for(i=0;i<nseqs;i++) {
     for(j=0;j<numBases;j++)
-      fputc(sequences[i][j],stdout);
-    printf("\n");
+      /* fputc(sequences[i][j],stdout); */
+      Rprintf("%s",sequences[i][j]);
+    Rprintf("\n");
   }
 }
 
@@ -130,33 +128,33 @@ int *readOtherData(int *pnumBreaks)
 {
   int i, *bnewVec;
 
-  fprintf(stderr,"\nEnter number of breaks: ");
+  REprintf("\nEnter number of breaks: "); /*write to error stream*/
   scanf("%d", pnumBreaks);
-  fprintf(stdout,"\n%d prior breaks\n ",*pnumBreaks);
+  Rprintf("\n%d prior breaks\n ",*pnumBreaks);
 
   /*Allocate memory for bnewVec */
   bnewVec = (int *)malloc((*pnumBreaks)*sizeof(int));
   
   if(*pnumBreaks > 0){
-    fprintf(stderr,"\nEnter the %d ordered site(s) just before the break(s): ",
+    REprintf("\nEnter the %d ordered site(s) just before the break(s): ",
 	    (*pnumBreaks));
     for(i=0;i<(*pnumBreaks);i++) {
       scanf("%d", &(bnewVec[i]));
       bnewVec[i]--; /*convert to C-style indexing*/
     }
-    fprintf(stdout,"Breaks entered: ");
+    Rprintf("Breaks entered: ");
     for(i=0;i<(*pnumBreaks);i++) {
-      fprintf(stdout,"%d ",bnewVec[i]+1);
+      Rprintf("%d ",bnewVec[i]+1);
     }
-    fprintf(stdout,"\n");
+    Rprintf("\n");
   }
 
-  fprintf(stderr,"\nEnter window half width to use: ");
+  REprintf("\nEnter window half width to use: ");
   scanf("%d", &winHalfWidth);
-  fprintf(stdout,"\nwindow half-width=%d sites.\n ",winHalfWidth);
-  fprintf(stderr,"\nEnter number of MC reps to use for the permutation distribution: ");
+  Rprintf("\nwindow half-width=%d sites.\n ",winHalfWidth);
+  REprintf("\nEnter number of MC reps to use for the permutation distribution: ");
   scanf("%d", &permReps);
-  fprintf(stdout,"\n%d MC reps for the permutation distribution\n ",permReps);
+  Rprintf("\n%d MC reps for the permutation distribution\n ",permReps);
   return(bnewVec);
 }
 
@@ -168,13 +166,11 @@ char **makeCharArray(int nrows, int ncols)
   int i;
 
   if((newArray = (char **)malloc(nrows*sizeof(char*)))==NULL){
-    fprintf(stderr,"Out of memory allocating character array\n");
-    exit(0);
+    error("Out of memory allocating character array\n");
   }
   for(i=0;i<nrows;i++) {
     if((newArray[i] = (char *)malloc((ncols+1)*sizeof(char)))==NULL){
-      fprintf(stderr,"Out of memory allocating character array\n");
-      exit(0);
+      error("Out of memory allocating character array\n");
     }
     newArray[i][ncols]='\0'; /* to terminate with null char so 
 				newArray[i] behaves like a string */
@@ -190,13 +186,11 @@ double ** make_double_mat(int nrows, int ncols)
   double **mat;
 
   if((mat = (double **)malloc(nrows*sizeof(double *)))==NULL){
-    fprintf(stderr,"Out of memory allocating double-precision matrix\n");
-    exit(0);
+    error("Out of memory allocating double-precision matrix\n");
   }
   for(i=0;i<nrows;i++)
     if((mat[i] = (double *)malloc(ncols*sizeof(double)))==NULL){
-      fprintf(stderr,"Out of memory allocating double-precision matrix\n");
-      exit(0);
+      error("Out of memory allocating double-precision matrix\n");
     }
   return(mat);
 }
@@ -207,13 +201,11 @@ int ** make_int_mat(int nrows, int ncols)
   int **mat;
 
   if((mat = (int **)malloc(nrows*sizeof(int *)))==NULL){
-    fprintf(stderr,"Out of memory allocating integer matrix\n");
-    exit(0);
+    error("Out of memory allocating integer matrix\n");
   }
   for(i=0;i<nrows;i++)
     if((mat[i] = (int *)malloc(ncols*sizeof(int)))==NULL){
-      fprintf(stderr,"Out of memory allocating integer matrix\n");
-      exit(0);
+      error("Out of memory allocating integer matrix\n");
     }
   return(mat);
 }
@@ -407,13 +399,11 @@ int **dynamicArray(int nrows, int ncolumns) {
      int i;
      int **array = (int **)malloc(nrows * sizeof(int *));
      if(!array) {
-        printf("Out of memory\n");
-        exit(1);
+        Rprintf("Out of memory\n");
      }
      array[0] = (int *)malloc(nrows * ncolumns * sizeof(int));
      if (!array[0]){
-        printf("Out of memory\n");
-        exit(1);
+        Rprintf("Out of memory\n");
      }
      for(i = 1; i < nrows; i++)
         array[i] = array[0] + i * ncolumns;

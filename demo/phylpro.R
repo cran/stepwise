@@ -1,4 +1,4 @@
-inputFile<-system.file("data", "simulinfile", package = "stepwise")
+inputFile<-system.file("extdata", "simulinfile.txt", package = "stepwise")
 breaks<-c(548, 735, 832)
 WinHalfWidth<-30
 permReps<-10
